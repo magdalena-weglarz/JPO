@@ -1,0 +1,131 @@
+brylaSim.java
+public class brylaSim {
+public static void main(String[] args) {
+//Inicjacja obiektow
+walec A = new walec (10, 2);
+kula B = new kula (4, 3);
+pret C = new pret (12,2);
+punktM[] X = new punktM[5];
+X[0]=new walec(1,1);
+X[1]=new kula(2,5);
+X[2]=new pret(4,3);
+X[3]=new kula(4,4);
+X[4]=new pret((float) 4.5,10);
+//Komunikaty
+System.out.println("Walec o opisie: '"+A+"' ma mase "+A.getMass()+", promien "+A.getR()+" i glowny moment bezwladnosci rowny "+A.moment()+", a moment wzgledem rownoleglej osi obrotu przesunietej o 5 wynosi "+A.momentSteiner(5));
+System.out.println("Kula o opisie: '"+B+"' ma mase "+B.getMass()+", promien "+B.getR()+" i glowny moment bezwladnosci rowny "+B.moment()+", a moment wzgledem rownoleglej osi obrotu przesunietej o 5 wynosi "+B.momentSteiner(5));
+System.out.println("Pret o opisie: '"+C+"' ma mase "+C.getMass()+", dlugosc "+C.getL()+" i glowny moment bezwladnosci rowny "+C.moment()+", a moment wzgledem rownoleglej osi obrotu przesunietej o 5 wynosi "+C.momentSteiner(5));
+for(int i=0;i<5;i++)
+{
+System.out.println(X[i]+" ma mase "+X[i].getMass()+" i glowny moment bezwladnosci rowny "+X[i].moment()+", a moment wzgledem rownoleglej osi obrotu przesunietej o 4 wynosi "+X[i].momentSteiner(4));
+}
+}
+}
+punktM.java
+public class punktM {
+//pola
+private double mass;
+//konstruktory
+public punktM (){mass=0;};//konstruktor domyslny
+public punktM (double mass)//konstruktor zwykly (blokuje nadanie ujemnej masy)
+{
+if (mass>0)
+{
+this.mass=mass;
+}
+else
+{
+this.mass=0;
+}
+}
+//akcesory
+public double getMass(){return mass;}//akcesor czytajacy
+public void setMass(double mass) //akcesor piszacy (blokuje nadanie ujemnej masy)
+{
+if (mass>0)
+{
+this.mass=mass;
+}
+else
+{
+this.mass=0;
+}
+}
+//metody
+public double moment(){return 0;}//Oblicznie momentu bezwladnosci
+public double momentSteiner(float a){return moment()+mass*a*a;}//Obliczanie momentu z twierdzenia Steinera
+public String toString(){return "Punkt Materialny";}//opis obiektu
+}
+kula.java public class kula extends punktM{
+//pola
+private float r;
+//konstruktory
+public kula()
+{
+super();
+r=0;
+}
+public kula(float r, float mass)
+{
+super(mass);
+if (r>0)
+this.r=r;
+else
+this.r=0;
+}
+//akcesory
+public float getR(){return r;}
+public void setR(float r){this.r=r;}
+//metody
+public double moment(){return getMass()*r*r*2/5;}
+public String toString(){return "Kula o promieniu "+r;}
+}
+pret.java
+public class pret extends punktM{
+//pola
+private float l;
+//konstruktory
+public pret()
+{
+super();
+l=0;
+}
+public pret(float l, float mass)
+{
+super(mass);
+if (l>0)
+this.l=l;
+else
+this.l=0;
+}
+//akcesory
+public float getL(){return l;}
+public void setL(float l){this.l=l;}
+//metody
+public double moment(){return getMass()*l*l/12;}
+public String toString(){return "Pret o dlugosci "+l;}
+}
+walec.java
+public class walec extends punktM{
+//pola
+private float r;
+//konstruktory
+public walec()
+{
+super();
+r=0;
+}
+public walec(float r, float mass)
+{
+super(mass);
+if (r>0)
+this.r=r;
+else
+this.r=0;
+}
+//akcesory
+public float getR(){return r;}
+public void setR(float r){this.r=r;}
+//metody
+public double moment(){return getMass()*r*r/2;};
+public String toString(){return "Walec o promieniu podstawy "+r;}}
