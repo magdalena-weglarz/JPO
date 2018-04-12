@@ -1,0 +1,78 @@
+public class Vector2D{
+    //zmienne
+    public double x,y;
+    //kostruktory
+    public Vector2D()
+    {
+        this.x = 0;
+        this.y = 0;
+    }
+    public Vector2D(double x, double y)
+    {
+        this.x=x;
+        this.y=y;
+    }
+    //metody
+    public Vector2D sumVect(Vector2D vect)
+    {
+        return new Vector2D(this.x + vect.x, this.y + vect.y);
+    }
+    public Vector2D subVect(Vector2D vect)
+    {
+        return new Vector2D(this.x - vect.x , this.y - vect.y);
+    }
+    public Vector2D constMultVect(int k)
+    {
+        return new Vector2D(this.x *k,this.y * k);
+    }
+    public double length()
+    {
+        return Math.sqrt((this.x*this.x ) + (this.y *this.y));
+    }
+    public Vector2D normalize()
+    {
+        try
+        {
+            return new Vector2D(this.x/this.length(),this.y/this.length());
+
+        }
+        catch (ArithmeticException e)
+        {
+            System.out.println("Nie mozna znormalizowac, dlugosc wynosi 0");
+            return null;
+
+        }
+    }
+
+}
+
+
+
+public class Main {
+ 
+    public static void main(String[] args)
+    {
+        Vector2D vect1 = new Vector2D(4d,8d);
+        Vector2D vect2 = new Vector2D(5d,6d);
+        Vector2D sum12 = vect1.sumVect(vect2);
+        Vector2D sub12 = vect1.subVect(vect2);
+        Vector2D wers1 = vect1.normalize();
+        Vector2D wers2 = vect2.normalize();
+        double l1 = vect1.length();
+        double l2 = vect2.length();
+        Vector2D v1amp = vect1.constMultVect(9);
+        System.out.println("Wektor 1: ");
+        System.out.println("dlugosc: " + l1);
+        System.out.println("znormalizowany: x: " + wers1.x + " y: " + wers1.y);
+        System.out.println("Wektor 2: ");
+        System.out.println("dlugosc: " + l2);
+        System.out.println("znormalizowany: x: " + wers2.x + " y: " + wers2.y);
+        System.out.println();
+        System.out.println("Suma: x: " + sum12.x + " y: " + sum12.y);
+        System.out.println("Roznica: x: " + sub12.x + " y: " + sub12.y);
+        System.out.println();
+        System.out.println("Wektor 1 pomnozony przez 9:");
+        System.out.println("x: " + v1amp.x);
+        System.out.println("y: " + v1amp.y); 
+    }
+}
