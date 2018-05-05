@@ -1,0 +1,156 @@
+public class SimEngine {
+ private double m;
+ private double k;
+ private double c;
+ private double L0;
+ private double xMass;
+ private double yMass;
+ private double xPunkt;
+ private double yPunkt;
+ private double xV;
+ private double yV;
+ private double g;
+ public double ay;
+ public double t;
+ public double temp;
+ Vector2D polozenieMass;
+ Vector2D polozeniePunkt;
+ public void getM(double get_M){
+ m=get_M;
+ }
+ public void getK(double get_K){
+ k=get_K;
+ }
+ public void getC(double get_C){
+ c=get_C;
+ }
+ public void getL0(double get_L0){
+ L0=get_L0;
+ }
+ public void getxMass(double get_xMass){
+ xMass=get_xMass;
+ }
+ public void getyMass(double get_yMass){
+ yMass=get_yMass;
+ }
+ public void getxPunkt(double get_xPunkt){
+ xPunkt=get_xPunkt;
+ }
+ public void getyPunkt(double get_yPunkt){
+ yPunkt=get_yPunkt;
+ }
+ public void getyV(double get_yV){
+ yV=get_yV;
+ }
+ public void getG(double get_G){
+ g=get_G;
+ }
+ public double show_xPunkt(){
+ return polozenieMass.x;
+ }
+ public double show_yPunkt(){
+ return polozeniePunkt.y;
+ }
+ public double show_xMass(){
+ return polozenieMass.x;
+ }
+ public double show_yMass(){
+ System.out.println(polozenieMass.y);
+ return polozenieMass.y;
+ }
+ public SimEngine(double m1, double k1, double c1, double L1, double g1, double xMass1, double
+yMass1, double yPunkt1){
+ m=m1;
+ k=k1;
+ c=c1;
+ L0=L1;
+ xV=0;
+ yV=0;
+ g=g1;
+ ay=0;
+ xMass=xMass1;
+ yMass=yMass1;
+ xPunkt=xMass1; //wiszą w jednej linii
+ yPunkt=yPunkt1;
+ t=0;
+ polozenieMass=new Vector2D(xMass1, yMass1);
+ polozeniePunkt=new Vector2D(xMass1, yPunkt1);
+ }
+ public void przebieg (double krok){
+ t=krok;
+ ay = (m * g - k * polozenieMass.y - c *yV)/m;
+ yV = yV + ay * t;
+ temp = temp +yV*t+ay*t*t/2;
+ polozenieMass.y=(int)temp;
+ }
+ public void zerowanie(){
+ yV=0;
+ }
+}
+import java.util.TimerTask;
+public class SimTask extends TimerTask {
+ private static final long serialVersionUID = 1L;
+ private SimEngine pole1;
+ private SpringApplet pole2;
+ private double odstep;
+ public SimTask (SimEngine pole1, SpringApplet pole2, double odstep){
+ this.pole1=pole1;
+ this.pole2=pole2;
+ this.odstep=odstep;
+ }
+ public void run() {
+ pole1.przebieg(odstep);
+ pole2.repaint();
+ }
+}
+import javax.swing.*;
+import java.awt.*;
+import java.util.Timer;
+public class SpringApplet extends JApplet{
+ private static final long serialVersionUID = 1L;
+ private SimEngine simE;
+ private SimTask simT;
+ private Timer time;
+ @Override public void init() {
+ this.setSize(200,300);
+ simE=new SimEngine( 5,0.4,0.3, 100,10 ,100, 100 , 0);
+ simT=new SimTask(simE,this, 0.01);
+ time=new Timer();
+ time.scheduleAtFixedRate(simT, 0, 1);
+ }
+ @Override public void paint(Graphics gDC){
+ gDC.fillRect(0, 0, 400, 300); //czyszczenie appletu)
+ gDC.setColor(Color.green);
+ gDC.drawLine((int) simE.show_xPunkt(),(int) simE.show_yPunkt(), (int) simE.show_xMass(), (int)
+simE.show_yMass());
+ gDC.setColor(Color.red);
+ gDC.fillOval(((int) simE.show_xMass()-25), (int) simE.show_yMass(),50,50);
+ }
+}
+public class Vector2D {
+ public double x;
+ public double y;
+ public Vector2D(){
+ x=0;
+ y=0;
+ }
+ public Vector2D(double x1, double y1){
+ x=x1;
+ y=y1;
+ }
+ public Vector2D suma(Vector2D wektorDodany){
+ return new Vector2D(x+wektorDodany.x,y+wektorDodany.y);
+ }
+ public Vector2D roznica(Vector2D wektorOdejmowany){
+ return new Vector2D(x-wektorOdejmowany.x,y-wektorOdejmowany.y);
+ }
+ public Vector2D mnozenie(double k){
+ return new Vector2D(x*k,y*k);
+ }
+ public double dlugosc(){
+ return (Math.sqrt(x*x+y*y));
+ }
+ public Vector2D normalize(){
+ return new Vector2D(x/dlugosc(),y/dlugosc());
+ }
+}
